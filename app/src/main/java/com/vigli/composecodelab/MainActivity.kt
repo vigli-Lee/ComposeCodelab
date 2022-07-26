@@ -23,6 +23,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,16 +39,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeCodelabTheme {
-                Conversation(conversationSample)
+                Conversation()
             }
         }
     }
 }
 
+
 @Composable
-fun Conversation(messages: List<Message>) {
+fun Conversation() {
+    val viewModel = MainViewModel()
+
+    val messages by viewModel.messages.observeAsState()
+
     LazyColumn {
-        items(messages) { message ->
+        items(messages!!) { message ->
             MessageCard(message)
         }
     }
@@ -89,7 +95,9 @@ fun MessageCard(msg: Message) {
                 // surfaceColor color will be changing gradually from primary to surface
                 color = surfaceColor,
                 // animateContentSize will change the Surface size gradually
-                modifier = Modifier.animateContentSize().padding(1.dp)
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(1.dp)
             ) {
                 Text(
                     text = msg.body,
@@ -105,43 +113,6 @@ fun MessageCard(msg: Message) {
     
 }
 
-private val conversationSample = listOf(
-    Message("Android", "Jetpack Compose\nHello"),
-    Message("Android", "Jetpack Compose2\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose3\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose4\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose5\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose6\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose7\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose8\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose9\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose\nHello"),
-    Message("Android", "Jetpack Compose2\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose3\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose4\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose5\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose6\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose7\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose8\n" +
-            "Hello"),
-    Message("Android", "Jetpack Compose9\n" +
-            "Hello"),
-)
-
 @Preview(name = "Light Mode")
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
@@ -151,7 +122,7 @@ private val conversationSample = listOf(
 @Composable
 fun PreviewMessageCard() {
     ComposeCodelabTheme {
-        Conversation(messages = conversationSample)
+        Conversation()
     }
 }
 

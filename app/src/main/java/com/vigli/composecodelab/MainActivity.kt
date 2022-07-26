@@ -44,8 +44,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class Message(val author: String, val body: String)
-
 @Composable
 fun Conversation(messages: List<Message>) {
     LazyColumn {

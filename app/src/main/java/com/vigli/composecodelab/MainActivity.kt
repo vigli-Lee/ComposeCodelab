@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -48,14 +49,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Conversation() {
-    val viewModel = MainViewModel()
+    val viewModel = remember {
+        MainViewModel()
+    }
 
-    val messages by viewModel.messages.observeAsState()
+    val message = viewModel.message.observeAsState()
 
-    LazyColumn {
-        items(messages!!) { message ->
-            MessageCard(message)
+    Column {
+        Button(
+            onClick = viewModel::onRefreshClick,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = "refresh")
         }
+
+        MessageCard(msg = message.value!!)
     }
 }
 
